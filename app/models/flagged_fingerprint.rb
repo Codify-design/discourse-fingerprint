@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 class FlaggedFingerprint < ActiveRecord::Base
+  # A fingerprint value must exist and be unique for each flagged record.
+  # This enforces data integrity at the application level.
+  validates :value, presence: true, uniqueness: true
+
+  # Scopes for easily querying records based on their flag type.
+  # This allows for cleaner code in the controller, e.g., `FlaggedFingerprint.hidden`
+  scope :hidden, -> { where(hidden: true) }
+  scope :silenced, -> { where(silenced: true) }
 end
 
 # == Schema Information
